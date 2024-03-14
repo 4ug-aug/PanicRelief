@@ -92,7 +92,7 @@ ipcMain.on('form-submit', async (event, arg) => {
   
 
   sendEmail({
-    to: 'augusttollerup@hotmail.com',
+    to: '',
     subject: `Severity: ${arg.severity} - ${arg.title}`,
     text: `Core Service: ${arg.coreService}\n\n${arg.description}`,
     html: `<p>${arg.description}</p><p>Core Service: ${arg.coreService}</p>`,

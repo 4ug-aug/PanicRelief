@@ -1,6 +1,10 @@
 {
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
+  "/components/imageSkeleton": "pages/components/imageSkeleton.html",
+  "/components/sevDropdown": "pages/components/sevDropdown.html",
+  "/form": "pages/form.html",
+  "/components/dragUpload": "pages/components/dragUpload.html",
   "/_document": "pages/_document.js",
-  "/form": "pages/form.js"
+  "/404": "pages/404.html"
 }
