@@ -93,8 +93,15 @@ export default function Form() {
   };
 
 
-
   return (
+    // we place a settings button on the top right of the page
+    // when clicked, it will open the settings page
+    <div>
+      <div>
+        <Flex justify="end" style={{paddingRight: '5rem', paddingTop: '1rem'}}>
+          <Button onClick={() => window.location.href = '/settings'} size="1" variant="soft" style={{cursor: 'pointer'}}>Settings</Button>
+        </Flex>
+      </div>
     <Flex justify="center" direction="column" style={main_content}>
       <div style={{paddingBottom: '1rem', justifyContent: 'space-between', display: 'flex'}}>
       <div>
@@ -166,5 +173,6 @@ export default function Form() {
       </Flex>
 
     </Flex>
+    </div>
   );
 }

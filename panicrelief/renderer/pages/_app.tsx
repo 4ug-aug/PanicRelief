@@ -4,6 +4,7 @@ import '@radix-ui/themes/styles.css';
 import { Theme } from '@radix-ui/themes';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { createContext, useEffect, useState } from 'react';
 
 import '../styles/globals.css'
 
@@ -14,7 +15,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         radius="medium"
         >
         <Component {...pageProps} />
-      
       </Theme>
       <ToastContainer stacked />
     </div>

@@ -1,8 +1,11 @@
 import path from 'path'
-import { app, ipcMain } from 'electron'
+import { app, ipcMain, safeStorage } from 'electron'
 import serve from 'electron-serve'
 import { createWindow } from './helpers'
+import configStore from './helpers/store'
 const nodemailer = require('nodemailer');
+// load dotenv
+require('dotenv').config();
 
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -18,15 +21,15 @@ const transporter = nodemailer.createTransport({
   port: 587, // Common port for SMTP
   secure: false, // true for 465, false for other ports
   auth: {
-    user: '',
-    pass: '',
+    user: configStore.getEmail(),
+    pass: configStore.getPassword(),
   },
 });
 
 // Function to send an email
 const sendEmail = async ({ to, subject, text, html, attachments }) => {
   const mailOptions = {
-    from: '', // sender address
+    from: configStore.getEmail(), // sender address
     to, // list of receivers
     subject, // Subject line
     text, // plain text body
@@ -89,13 +92,11 @@ ipcMain.on('form-submit', async (event, arg) => {
       path: arg[key].path, // The path to the file
     }));
 
-  
-
   sendEmail({
-    to: '',
+    to: configStore.getSetting('emailRecipients'),
     subject: `Severity: ${arg.severity} - ${arg.title}`,
     text: `Core Service: ${arg.coreService}\n\n${arg.description}`,
-    html: `<p>${arg.description}</p><p>Core Service: ${arg.coreService}</p>`,
+    html: `<p>Core Service: ${arg.coreService}</p><p>${arg.description}</p>`,
     attachments,
   }).then(result => {
     if(result.success) {
@@ -105,4 +106,14 @@ ipcMain.on('form-submit', async (event, arg) => {
       console.error('Failed to send email:', result.error);
     }
   });
+});
+
+ipcMain.on('get-setting', async (event, key) => {
+  const value = configStore.getSetting(key);
+  event.reply('get-setting-reply', {'key': key, 'value': value});
+});
+
+ipcMain.on('set-setting', async (event, formData) => {
+  configStore.setSetting(formData.key, formData.value);
+  event.reply('set-setting-reply', 'Setting updated');
 });

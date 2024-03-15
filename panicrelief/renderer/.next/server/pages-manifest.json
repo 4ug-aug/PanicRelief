@@ -1,10 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/components/imageSkeleton": "pages/components/imageSkeleton.html",
-  "/components/sevDropdown": "pages/components/sevDropdown.html",
-  "/form": "pages/form.html",
-  "/components/dragUpload": "pages/components/dragUpload.html",
-  "/_document": "pages/_document.js",
-  "/404": "pages/404.html"
-}
+{"/_app":"pages/_app.js","/components/dragUpload":"pages/components/dragUpload.html","/components/imageSkeleton":"pages/components/imageSkeleton.html","/components/sevDropdown":"pages/components/sevDropdown.html","/form":"pages/form.html","/settings":"pages/settings.html","/_error":"pages/_error.js","/_document":"pages/_document.js","/404":"pages/404.html"}

@@ -14,7 +14,7 @@ const handler = {
     }
   },
   receiveOnce(channel: string, func: (...args: unknown[]) => void) {
-    ipcRenderer.once(channel, (event, ...args) => func(...args));
+    ipcRenderer.on(channel, (event, ...args) => func(...args));
   },
 }
 

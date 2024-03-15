@@ -45,7 +45,7 @@ const SevDropdown: React.FC<SevDropdownProps> = ({ onValueChange }) => {
   return (
   <DropdownMenu.Root>
   <DropdownMenu.Trigger>
-    <Button variant="soft" style={button_style}>
+    <Button variant="soft" style={{...button_style, cursor: 'pointer'}}>
       Severity
       <CaretDownIcon />
     </Button>
