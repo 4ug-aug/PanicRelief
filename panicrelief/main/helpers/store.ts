@@ -73,9 +73,21 @@ const schema = {
     type: 'string',
     default: '',
   },
+  smsRecipients: {
+    type: 'string',
+    default: '',
+  },
   encryptionKey: {
     type: 'string',
     default: ''
+  },
+  twilio_account_sid: {
+    type: 'string',
+    default: '',
+  },
+  twilio_auth_token: {
+    type: 'string',
+    default: '',
   },
 };
 

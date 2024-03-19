@@ -14,6 +14,10 @@ const configNameMap = {
   password: 'Password',
   server_host: 'Server Host',
   server_port: 'Server Port',
+  emailRecipients: 'Email Recipients',
+  smsRecipients: 'SMS Recipients',
+  twilio_account_sid: 'Twilio Account SID',
+  twilio_auth_token: 'Twilio Auth Token',
 };
 
 const tooltipMap = {
@@ -21,6 +25,10 @@ const tooltipMap = {
   password: 'Your email password',
   server_host: 'Your email server host (default: outlook.office365.com)',
   server_port: 'Your email server port (default: 993)',
+  emailRecipients: 'Comma separated emails to send alerts to',
+  smsRecipients: 'Comma separated phone numbers to send alerts to',
+  twilio_account_sid: 'Your Twilio account SID',
+  twilio_auth_token: 'Your Twilio auth token',
 };
 
 type response = {
@@ -36,7 +44,24 @@ const SettingsForm = () => {
     server_host: string;
     server_port: number;
     emailRecipients: string;
+    smsRecipients: string;
+    twilio_account_sid: string;
+    twilio_auth_token: string;
   };
+
+  const left = {
+    email: 'email',
+    password: 'password',
+    server_host: 'server_host',
+    server_port: 'server_port',
+  }
+
+  const right = {
+    emailRecipients: 'emailRecipients',
+    smsRecipients: 'smsRecipients',
+    twilio_account_sid: 'twilio_account_sid',
+    twilio_auth_token: 'twilio_auth_token',
+  }
 
   const [configData, setConfigData] = useState({
     email: '',
@@ -44,6 +69,9 @@ const SettingsForm = () => {
     server_host: 'smtp-mail.outlook.com',
     server_port: 587,
     emailRecipients: '',
+    smsRecipients: '',
+    twilio_account_sid: '',
+    twilio_auth_token: '',
   } as data);
 
   useEffect(() => {
@@ -54,6 +82,9 @@ const SettingsForm = () => {
     (window as any).ipc.send('get-setting', 'email');
     (window as any).ipc.send('get-setting', 'password');
     (window as any).ipc.send('get-setting', 'emailRecipients');
+    (window as any).ipc.send('get-setting', 'smsRecipients');
+    (window as any).ipc.send('get-setting', 'twilio_account_sid');
+    (window as any).ipc.send('get-setting', 'twilio_auth_token');
 
     // we want to listen for the response from the main process for each setting
     window.ipc.on('get-setting-reply', (response: response) => {
@@ -94,10 +125,10 @@ const SettingsForm = () => {
       <Grid columns="2" gap="3" width="auto">
       <div>
         <form style={{ maxWidth: 400 }}>
-        {Object.keys(configData).map(key => (
+        {Object.keys(left).map(key => (
             <div key={key}>
                 {/* If the key is not emailRecipients */}
-                {key !== 'emailRecipients' && (
+                {key !== 'emailRecipients' && key !== 'twilio_account_sid' && key !== 'twilio_auth_token' && (
                   <>
                     <Text size="2" weight="bold">{configNameMap[key]}</Text>
                     <Spacer y={1} />
@@ -123,21 +154,26 @@ const SettingsForm = () => {
         </div>
 
         <div>
-          {/* Here we define the recipients of the email */}
-          <Text size="2" weight="bold">Email Recipients</Text>
-          <Spacer y={1} />
-          <TextField.Input
-              style={{ backgroundColor: 'transparent' }}
-              type='text'
-              name='emailRecipients'
-              value={configData.emailRecipients}
-              placeholder='Enter email recipients (separated by commas)'
-              onChange={handleChange}
-          />
-
+          {Object.keys(right).map(key => (
+            <div key={key}>
+              <Text size="2" weight="bold">{configNameMap[key]}</Text>
+              <Spacer y={1} />
+              <TextField.Input
+                style={{ backgroundColor: 'transparent' }}
+                type='text'
+                name={key}
+                value={configData[key]}
+                placeholder={configNameMap[key]}
+                onChange={handleChange}
+              />
+              <Spacer y={1} />
+              <Text size="1" color="gray">{tooltipMap[key]}</Text>
+              <Spacer y={2} />
+            </div>
+          ))}
         </div>
       </Grid>
-    </div>
+      </div>
     </React.Fragment>
   );
 };

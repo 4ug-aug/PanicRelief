@@ -15,6 +15,22 @@ if (isProd) {
   app.setPath('userData', `${app.getPath('userData')} (development)`)
 }
 
+const sendSMS = async (message) => {
+  // Twilio Credentials
+  const accountSid = configStore.getSetting('twilio_account_sid');
+  const authToken = configStore.getSetting('twilio_auth_token');
+  const client = require('twilio')(accountSid, authToken);
+
+  // Send SMS
+  client.messages
+    .create({
+      body: message,
+      from: '+17867566698',
+      to: configStore.getSetting('smsRecipients'),
+    })
+    .then(message => console.log(message.sid));
+}
+
 // Configure your SMTP transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp-mail.outlook.com',
@@ -74,10 +90,6 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-ipcMain.on('message', async (event, arg) => {
-  event.reply('message', `${arg} World!`)
-})
-
 ipcMain.on('form-submit', async (event, arg) => {
   console.log('Received form submission:', arg);
   event.reply('form-submit-reply', 'Form submitted!');
@@ -106,6 +118,12 @@ ipcMain.on('form-submit', async (event, arg) => {
       console.error('Failed to send email:', result.error);
     }
   });
+
+  sendSMS(`Severity: ${arg.severity} - ${arg.title}`).then(result => {
+    console.log('SMS sent successfully');
+    event.reply('form-submit-reply-sms', 'SMS sent successfully');
+  });
+
 });
 
 ipcMain.on('get-setting', async (event, key) => {
